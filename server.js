@@ -6,9 +6,11 @@ const connectDB = require('./config/dbNotes');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
+const cookieParser = require('cookie-parser');
 
 connectDB();
 
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/admins', require('./routes/admins'));

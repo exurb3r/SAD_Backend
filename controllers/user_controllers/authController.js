@@ -26,16 +26,14 @@ const login = async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        res.json({
-            token,
-            user: {
-                userId: userFound.userId,
-                username: userFound.username,
-                email: userFound.email,
-                role: userFound.role
-            } 
-        }
-        );
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 3600000
+        });
+
+        res.json({message: "Login successful",});
 
     } catch (err) {
         res.status(500).json({ message: err.message});
@@ -78,7 +76,6 @@ const signup = async(req, res) => {
             Task.create({ userId: registeredUser._id, notes: [] })
         ]);
 
-
         res.status(200).json({
             user: {
                 id: addNewUser._id,
@@ -93,4 +90,31 @@ const signup = async(req, res) => {
     }
 }
 
-module.exports = {login, signup};
+const me = async (req, res) => {
+    try {
+        const user = await AppUser.findById(req.user.id)
+            .select('userId username email role membershipStatus');
+
+        const game = await UserGameDetails.findOne({ userId: req.user.id })
+            .select('level exp_points currentStreak highestStreak');
+
+        res.json({
+            user,
+            game
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax'
+    });
+    res.json({ message: 'Logged out' });
+};
+
+module.exports = {login, signup, me, logout};
