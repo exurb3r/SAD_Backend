@@ -25,14 +25,12 @@ const login = async (req, res) => {
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "1h" }
         );
-
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
+            secure: true,     // was: false
+            sameSite: 'none', // was: 'lax'
             maxAge: 3600000
         });
-
         res.json({message: "Login successful",});
 
     } catch (err) {
@@ -111,8 +109,8 @@ const me = async (req, res) => {
 const logout = (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: false,
-        sameSite: 'lax'
+        secure: true,     // was: false
+        sameSite: 'none', // was: 'lax'
     });
     res.json({ message: 'Logged out' });
 };
