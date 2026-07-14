@@ -4,7 +4,8 @@ const corsOptions = {
         'http://192.168.1.17:5173',
         'http://localhost:5174',
         'http://localhost:5175',
-        'https://sad-user-frontend-git-master-exurb3rs-projects.vercel.app'  
+        'https://sad-user-frontend-git-master-exurb3rs-projects.vercel.app',
+        'https://sad-user-frontend.vercel.app/'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
